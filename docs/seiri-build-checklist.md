@@ -8,7 +8,7 @@
 ## Current Snapshot
 
 - Current milestone: `M1 Engine Feasibility`
-- Current focus: `prepare the engine feasibility harness and validate organize`
+- Current focus: `run CodeRabbit review and merge M1`
 - Last updated: `2026-05-17`
 
 ---
@@ -42,25 +42,27 @@
 
 ## M1 — Engine Feasibility
 
-- [ ] Pull or install `organize` in an isolated evaluation area
-- [ ] Create Seiri engine feasibility harness
-- [ ] Validate simple extension match
-- [ ] Validate ordered first-match rule behavior
-- [ ] Validate nested `OR` logic
-- [ ] Validate `NOT` / exclusion behavior
-- [ ] Validate simulate / preview output
-- [ ] Validate move action
-- [ ] Validate rename action
-- [ ] Validate date-folder move action
-- [ ] Validate trash action
-- [ ] Document gaps between Seiri rule model and `organize`
-- [ ] Make engine decision: `keep`, `wrap`, or `replace`
+- [x] Review `organize` docs / repository in an isolated evaluation area
+- [x] Create Seiri engine feasibility harness
+- [x] Validate simple extension match
+- [x] Validate ordered first-match rule behavior
+- [x] Validate nested `OR` logic
+- [x] Validate `NOT` / exclusion behavior
+- [x] Validate simulate / preview output
+- [x] Validate move action
+- [x] Validate rename action
+- [x] Validate date-folder move action
+- [x] Validate trash action
+- [x] Document gaps between Seiri rule model and `organize`
+- [x] Make engine decision: `keep`, `wrap`, or `replace`
+- [ ] Run CodeRabbit review on the M1 diff
+- [ ] Merge the M1 branch to `main`
 
 ### M1 Exit Criteria
 
-- [ ] Feasibility results are documented
-- [ ] Engine decision is explicit
-- [ ] Watcher-dependent work is unblocked
+- [x] Feasibility results are documented
+- [x] Engine decision is explicit
+- [ ] M1 branch is reviewed and merged to `main`
 
 ---
 
@@ -178,7 +180,7 @@
 ## Open Decisions
 
 - [x] Styling system decision for v1
-- [ ] `organize` keep / wrap / replace decision
+- [x] `organize` keep / wrap / replace decision
 - [ ] Lemon Squeezy native key capability validation
 - [ ] Trash restore implementation approach
 
