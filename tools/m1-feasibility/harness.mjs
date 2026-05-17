@@ -59,6 +59,9 @@ const verdictRank = {
   missing: 2,
 };
 
+const supportedCompatibilities = new Set(["native", "wrapper", "missing"]);
+const supportedCapabilities = new Set(Object.keys(capabilitySupport));
+
 function assertScenarioShape(entry, index) {
   if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
     throw new Error(`Case ${index + 1} is not an object.`);
@@ -69,12 +72,28 @@ function assertScenarioShape(entry, index) {
       if (!Array.isArray(entry[key]) || entry[key].length === 0) {
         throw new Error(`Case ${index + 1} is missing a valid "${key}" array.`);
       }
+      for (const capability of entry[key]) {
+        if (typeof capability !== "string" || capability.trim() === "") {
+          throw new Error(`Case ${index + 1} has an invalid capability name in "${key}".`);
+        }
+        if (!supportedCapabilities.has(capability)) {
+          throw new Error(
+            `Case ${index + 1} has unsupported capability "${capability}".`,
+          );
+        }
+      }
       continue;
     }
 
     if (typeof entry[key] !== "string" || entry[key].trim() === "") {
       throw new Error(`Case ${index + 1} is missing a valid "${key}" string.`);
     }
+  }
+
+  if (!supportedCompatibilities.has(entry.expectedCompatibility)) {
+    throw new Error(
+      `Case ${index + 1} has unsupported expectedCompatibility "${entry.expectedCompatibility}".`,
+    );
   }
 
   if (entry.sampleFile && typeof entry.sampleFile !== "object") {

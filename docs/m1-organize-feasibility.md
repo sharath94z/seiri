@@ -33,8 +33,8 @@ The current harness validates the fixture shape, evaluates each scenario against
 | Seiri need | Organize fit | Notes |
 |---|---|---|
 | Folder-scoped rules | Native | Organize is configured per location and processes rules in order. |
-| Ordered rule evaluation | Native | Rule processing is top-to-bottom. Seiri can rely on this as the base ordering model. |
-| First-match stop behavior | Wrapper | Organize evaluates in order, but Seiri still needs wrapper logic if we want strict first-match semantics. |
+| Ordered rule evaluation | Wrapper | Seiri's ordered evaluation is wrapper-enforced so strict first-match stop semantics stay consistent. |
+| First-match stop behavior | Wrapper | Organize evaluates in order, but Seiri still needs wrapper logic for strict first-match-stop behavior. |
 | Simple extension matching | Native | Covered by standard file filters. |
 | Nested `OR` / `NOT` logic | Wrapper | Organize supports `all` / `any` / `none` plus negated filters, but not a Seiri-style nested boolean tree as a first-class shape. |
 | Simulate / preview | Native | `organize sim` is a built-in dry-run path. |
