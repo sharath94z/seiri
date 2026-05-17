@@ -134,6 +134,10 @@ At the end of this milestone we decide one of:
 - We know which rule features are native vs wrapped
 - We have a clear engine decision before watcher work begins
 
+### M1 Result
+
+Seiri will use `organize` with a thin translation layer. The engine is a good fit for file operations and simulation, but Seiri still needs wrapper logic for richer boolean grouping, source URL provenance, and strict Seiri-side rule semantics.
+
 ---
 
 ## M2 — Data Model + Storage

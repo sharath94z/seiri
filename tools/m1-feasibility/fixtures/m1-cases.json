@@ -1,0 +1,364 @@
+[
+  {
+    "id": "simple-extension-match",
+    "name": "Simple extension match",
+    "goal": "Verify a single extension rule can identify PDF files.",
+    "status": "ready",
+    "expectedCompatibility": "native",
+    "requiredCapabilities": ["extension", "move"],
+    "sampleFile": {
+      "name": "Invoice-April.pdf",
+      "sourcePath": "~/Downloads/Invoice-April.pdf"
+    },
+    "ruleSet": [
+      {
+        "id": "move-pdfs",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "pdf"
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/PDFs/"
+        }
+      }
+    ],
+    "expectedOutcome": "Move PDF files into the PDFs folder.",
+    "evidence": "Organize supports file extension filters and move actions directly."
+  },
+  {
+    "id": "ordered-rule-evaluation",
+    "name": "Ordered rule evaluation",
+    "goal": "Verify first-match precedence is preserved when multiple rules can match.",
+    "status": "ready",
+    "expectedCompatibility": "wrapper",
+    "requiredCapabilities": ["orderedEvaluation", "extension", "move"],
+    "sampleFile": {
+      "name": "Receipt.pdf",
+      "sourcePath": "~/Downloads/Receipt.pdf"
+    },
+    "ruleSet": [
+      {
+        "id": "move-pdfs",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "pdf"
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/PDFs/"
+        }
+      },
+      {
+        "id": "move-all-downloads",
+        "priority": 2,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "folder",
+            "operator": "contains",
+            "value": "Downloads"
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/Archive/"
+        }
+      }
+    ],
+    "expectedOutcome": "The PDF rule should win before the broader fallback rule.",
+    "evidence": "Organize is ordered, but Seiri needs wrapper enforcement if we want explicit first-match-stop behavior."
+  },
+  {
+    "id": "nested-or",
+    "name": "Nested OR groups",
+    "goal": "Verify nested disjunctions can be represented without collapsing rule intent.",
+    "status": "ready",
+    "expectedCompatibility": "wrapper",
+    "requiredCapabilities": ["nestedBoolean", "extension", "move"],
+    "sampleFile": {
+      "name": "Screenshot.png",
+      "sourcePath": "~/Downloads/Screenshot.png"
+    },
+    "ruleSet": [
+      {
+        "id": "move-images",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "conditionLogic": "any",
+            "conditions": [
+              {
+                "field": "extension",
+                "operator": "is",
+                "value": "png"
+              },
+              {
+                "field": "extension",
+                "operator": "is",
+                "value": "jpg"
+              }
+            ]
+          },
+          {
+            "field": "filename",
+            "operator": "starts_with",
+            "value": "Screenshot"
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/Screenshots/"
+        }
+      }
+    ],
+    "expectedOutcome": "Screenshot images should be grouped by nested OR logic before moving.",
+    "evidence": "Organize only exposes flat all/any/none grouping, so Seiri must normalize its tree."
+  },
+  {
+    "id": "not-exclusion",
+    "name": "NOT / exclusion behavior",
+    "goal": "Verify negative conditions can exclude files from a matching rule.",
+    "status": "ready",
+    "expectedCompatibility": "wrapper",
+    "requiredCapabilities": ["negation", "extension", "move"],
+    "sampleFile": {
+      "name": "Screenshot_2026-05-17.png",
+      "sourcePath": "~/Downloads/Screenshot_2026-05-17.png"
+    },
+    "ruleSet": [
+      {
+        "id": "move-non-screenshots",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "png"
+          },
+          {
+            "field": "filename",
+            "operator": "starts_with",
+            "value": "Screenshot",
+            "negate": true
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/Images/"
+        }
+      }
+    ],
+    "expectedOutcome": "Regular PNGs move; screenshot PNGs are excluded.",
+    "evidence": "Negation is available in organize, but Seiri still needs wrapper logic for its nested rule trees."
+  },
+  {
+    "id": "simulate-preview",
+    "name": "Simulate / preview output",
+    "goal": "Verify the harness can record preview-style output separately from execution.",
+    "status": "ready",
+    "expectedCompatibility": "native",
+    "requiredCapabilities": ["simulate", "extension", "move"],
+    "sampleFile": {
+      "name": "Draft.pdf",
+      "sourcePath": "~/Downloads/Draft.pdf"
+    },
+    "ruleSet": [
+      {
+        "id": "preview-pdfs",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "pdf"
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/PDFs/"
+        }
+      }
+    ],
+    "expectedOutcome": "Report the move without changing files.",
+    "evidence": "Organize includes a built-in simulate / dry-run mode."
+  },
+  {
+    "id": "move",
+    "name": "Move action",
+    "goal": "Verify a destination move can be expressed as a scenario result.",
+    "status": "ready",
+    "expectedCompatibility": "native",
+    "requiredCapabilities": ["move"],
+    "sampleFile": {
+      "name": "Statement.csv",
+      "sourcePath": "~/Downloads/Statement.csv"
+    },
+    "ruleSet": [
+      {
+        "id": "move-csv",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "csv"
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/Statements/"
+        }
+      }
+    ],
+    "expectedOutcome": "Move the file into a target folder.",
+    "evidence": "Move is a first-class organize action."
+  },
+  {
+    "id": "rename",
+    "name": "Rename action",
+    "goal": "Verify rename intent can be modeled independently of move intent.",
+    "status": "ready",
+    "expectedCompatibility": "native",
+    "requiredCapabilities": ["rename"],
+    "sampleFile": {
+      "name": "IMG_0001.JPG",
+      "sourcePath": "~/Downloads/IMG_0001.JPG"
+    },
+    "ruleSet": [
+      {
+        "id": "rename-camera-images",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "jpg"
+          }
+        ],
+        "action": {
+          "type": "rename",
+          "pattern": "photo-{date}-{original_name}"
+        }
+      }
+    ],
+    "expectedOutcome": "Rename the file without moving it.",
+    "evidence": "Rename is a first-class organize action."
+  },
+  {
+    "id": "move-date-folders",
+    "name": "Move with date folders",
+    "goal": "Verify date-folder destination shaping can be described for later engine comparison.",
+    "status": "ready",
+    "expectedCompatibility": "wrapper",
+    "requiredCapabilities": ["dateFolder", "move"],
+    "sampleFile": {
+      "name": "Receipt-2026-05-17.pdf",
+      "sourcePath": "~/Downloads/Receipt-2026-05-17.pdf"
+    },
+    "ruleSet": [
+      {
+        "id": "date-folder-receipts",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "pdf"
+          }
+        ],
+        "action": {
+          "type": "move_with_date",
+          "destination": "~/Documents/Receipts/{created.year}/{created.month}/"
+        }
+      }
+    ],
+    "expectedOutcome": "Move into a year/month folder structure.",
+    "evidence": "Organize can route through templated destinations, but Seiri must translate its own date-folder rule intent."
+  },
+  {
+    "id": "trash",
+    "name": "Trash action",
+    "goal": "Verify trash intent is included in the feasibility matrix.",
+    "status": "ready",
+    "expectedCompatibility": "native",
+    "requiredCapabilities": ["trash"],
+    "sampleFile": {
+      "name": "Old-Install.dmg",
+      "sourcePath": "~/Downloads/Old-Install.dmg"
+    },
+    "ruleSet": [
+      {
+        "id": "trash-installers",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "dmg"
+          }
+        ],
+        "action": {
+          "type": "trash"
+        }
+      }
+    ],
+    "expectedOutcome": "Send the file to the trash.",
+    "evidence": "Trash is a first-class organize action."
+  },
+  {
+    "id": "source-url-provenance",
+    "name": "Source URL provenance",
+    "goal": "Verify source URL matching remains in Seiri's public rule model even when organize cannot do it natively.",
+    "status": "ready",
+    "expectedCompatibility": "wrapper",
+    "requiredCapabilities": ["sourceUrlProvenance", "extension", "move"],
+    "sampleFile": {
+      "name": "DownloadFromBrowser.zip",
+      "sourcePath": "~/Downloads/DownloadFromBrowser.zip",
+      "sourceUrl": "https://github.com/openai/seiri/releases/download/latest/DownloadFromBrowser.zip"
+    },
+    "ruleSet": [
+      {
+        "id": "move-browser-downloads",
+        "priority": 1,
+        "conditionLogic": "all",
+        "conditions": [
+          {
+            "field": "source_url_contains",
+            "operator": "contains",
+            "value": "github.com"
+          },
+          {
+            "field": "extension",
+            "operator": "is",
+            "value": "zip"
+          }
+        ],
+        "action": {
+          "type": "move",
+          "destination": "~/Documents/Browser Downloads/"
+        }
+      }
+    ],
+    "expectedOutcome": "Browser-origin downloads should be prefiltered before the organize config runs.",
+    "evidence": "Organize does not document source URL provenance as a native filter, so Seiri must handle it in the wrapper."
+  }
+]
