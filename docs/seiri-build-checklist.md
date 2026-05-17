@@ -190,3 +190,6 @@
 - Whenever a task is completed, update the checkbox in the same change set if possible.
 - If work starts but is not finished, change `[ ]` to `[-]`.
 - If a task is blocked on a decision or external dependency, change `[ ]` to `[!]` and add a short note nearby.
+- Every new phase or stage should start from a fresh branch.
+- A phase only counts as complete after its branch is merged into `main`.
+- Every commit should be reviewed with CodeRabbit before merge.

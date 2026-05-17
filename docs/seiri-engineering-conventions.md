@@ -15,6 +15,14 @@ This document is a short working agreement for the Seiri codebase.
 - Do not start later milestones early.
 - Keep each milestone runnable and verifiable.
 - Mark checklist items as soon as the work is done.
+- Start each new phase or stage on a fresh git branch.
+- Do not begin a new phase until the previous phase is complete and merged to `main`.
+
+## Branch And Review Discipline
+
+- Every commit should be reviewed with CodeRabbit before it is merged.
+- Use CodeRabbit review as part of the normal commit flow, not as an optional extra.
+- A phase is only considered complete when its branch has been merged into `main`.
 
 ## State And Structure
 
