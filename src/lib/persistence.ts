@@ -237,7 +237,7 @@ function readLegacyActivity() {
     timestamp: entry.timestamp,
     status: entry.status,
     filename: entry.filename,
-    sourcePath: `~/Downloads/${entry.filename}`,
+    sourcePath: resolveLegacySourcePath(entry),
     destinationPath: null,
     finalPath: null,
     ruleId: null,
@@ -248,6 +248,22 @@ function readLegacyActivity() {
     undoneAt: null,
     undoSourceEntryId: null,
   }));
+}
+
+function resolveLegacySourcePath(entry: LegacyActivityEntry) {
+  if (entry.sourcePath) {
+    return entry.sourcePath;
+  }
+
+  if (entry.originalPath) {
+    return entry.originalPath;
+  }
+
+  if (entry.sourceFolder) {
+    return `${entry.sourceFolder.replace(/\/$/, "")}/${entry.filename}`;
+  }
+
+  return `~/Downloads/${entry.filename}`;
 }
 
 function mapLegacyAction(
@@ -319,4 +335,7 @@ type LegacyActivityEntry = {
   filename: string;
   status: ActivityEntry["status"];
   timestamp: string;
+  sourcePath?: string;
+  originalPath?: string;
+  sourceFolder?: string;
 };
