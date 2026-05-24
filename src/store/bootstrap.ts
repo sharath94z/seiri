@@ -12,14 +12,19 @@ export function bootstrapStores() {
   }
 
   bootstrapPromise = (async () => {
-    await migrateLegacyStorageIfNeeded();
+    try {
+      await migrateLegacyStorageIfNeeded();
 
-    await Promise.all([
-      useRulesStore.getState().hydrate(),
-      useSettingsStore.getState().hydrate(),
-      useActivityStore.getState().hydrate(),
-      useRetryQueueStore.getState().hydrate(),
-    ]);
+      await Promise.all([
+        useRulesStore.getState().hydrate(),
+        useSettingsStore.getState().hydrate(),
+        useActivityStore.getState().hydrate(),
+        useRetryQueueStore.getState().hydrate(),
+      ]);
+    } catch (error) {
+      bootstrapPromise = null;
+      throw error;
+    }
   })();
 
   return bootstrapPromise;
