@@ -310,7 +310,11 @@ function writeLocalStorage<T>(key: string, value: T) {
     return;
   }
 
-  window.localStorage.setItem(key, JSON.stringify(value));
+  try {
+    window.localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.warn(`Failed to persist localStorage key "${key}"`, error);
+  }
 }
 
 type LegacyRuleDefinition = {

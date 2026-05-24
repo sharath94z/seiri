@@ -295,11 +295,34 @@ where
 
     match serde_json::from_slice::<T>(&bytes) {
         Ok(value) => Ok(value),
-        Err(_) => {
+        Err(error) => {
+            let backup_path = corrupt_backup_path(path);
+            fs::write(&backup_path, &bytes).map_err(|write_error| {
+                format!(
+                    "failed to back up corrupt JSON from {} to {} after parse error {error}: {write_error}",
+                    path.display(),
+                    backup_path.display()
+                )
+            })?;
+            eprintln!(
+                "warning: failed to parse {}: {error}. Backed up corrupt bytes to {}",
+                path.display(),
+                backup_path.display()
+            );
             write_json_atomic(path, &default)?;
             Ok(default)
         }
     }
+}
+
+fn corrupt_backup_path(path: &Path) -> PathBuf {
+    let file_name = path
+        .file_name()
+        .and_then(|name| name.to_str())
+        .map(|name| format!("{name}.corrupt"))
+        .unwrap_or_else(|| "storage.corrupt".to_string());
+
+    path.with_file_name(file_name)
 }
 
 fn write_json_atomic<T>(path: &Path, value: &T) -> Result<(), String>
