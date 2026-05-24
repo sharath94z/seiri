@@ -196,17 +196,17 @@ function readLegacyRules() {
       };
     }
 
-      return {
-        id: rule.id,
-        name: rule.name,
-        enabled: rule.enabled,
-        priority: rule.priority,
-        conditionLogic: "all",
-        conditions: [],
-        actions: mapLegacyAction(rule.action, rule.destination),
-        isPrebuilt: false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
+    return {
+      id: rule.id,
+      name: rule.name,
+      enabled: rule.enabled,
+      priority: rule.priority,
+      conditionLogic: "all",
+      conditions: [{ type: "extension", value: "*", negate: false }],
+      actions: mapLegacyAction(rule.action, rule.destination),
+      isPrebuilt: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     };
   });
 }

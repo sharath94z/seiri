@@ -49,7 +49,7 @@ export function SettingsPage() {
             <dd>{settings.watchedFolders.join(", ")}</dd>
           </div>
           <div className="settings-row">
-            <dt>Licence tier</dt>
+            <dt>License tier</dt>
             <dd>{settings.license.tier}</dd>
           </div>
           <div className="settings-row">

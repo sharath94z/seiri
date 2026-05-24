@@ -46,11 +46,14 @@ export function RulesPage() {
                 <div>
                   <p>{rule.name}</p>
                   <span>
-                    {rule.actions[0]?.type} · top-level {rule.conditionLogic}
+                    {rule.actions?.[0]?.type ?? "no action"} · top-level{" "}
+                    {rule.conditionLogic}
                   </span>
                 </div>
                 <code>
-                  {"value" in rule.actions[0] ? rule.actions[0].value : "Trash"}
+                  {rule.actions?.[0] && "value" in rule.actions[0]
+                    ? rule.actions[0].value
+                    : "Trash"}
                 </code>
               </li>
             ))}

@@ -456,7 +456,7 @@ fn validate_settings(settings: &SettingsState) -> Result<(), String> {
     }
 
     if !matches!(settings.license.tier.as_str(), "free" | "monthly" | "lifetime") {
-        return Err("settings licence tier is invalid".into());
+        return Err("settings license tier is invalid".into());
     }
 
     Ok(())
