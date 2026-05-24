@@ -22,9 +22,14 @@ export const useActivityStore = create<ActivityStore>((set) => ({
     set({ entries, isHydrated: true });
   },
   addEntry: async (entry) => {
-    const entries = [entry, ...useActivityStore.getState().entries].slice(0, 1000);
-    await saveActivity(entries);
-    set({ entries });
+    let entriesToSave: ActivityEntry[] = [];
+
+    set((state) => {
+      entriesToSave = [entry, ...state.entries].slice(0, 1000);
+      return { entries: entriesToSave };
+    });
+
+    await saveActivity(entriesToSave);
   },
   setEntries: async (entries) => {
     await saveActivity(entries);
