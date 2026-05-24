@@ -9,17 +9,25 @@ import { bootstrapStores } from "./store/bootstrap";
 
 function App() {
   const [ready, setReady] = useState(false);
+  const [bootstrapError, setBootstrapError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
     void bootstrapStores()
-      .catch((error) => {
-        console.error("Failed to bootstrap Seiri stores", error);
-      })
-      .finally(() => {
+      .then(() => {
         if (mounted) {
           setReady(true);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to bootstrap Seiri stores", error);
+        if (mounted) {
+          setBootstrapError(
+            error instanceof Error
+              ? error.message
+              : "Unknown bootstrap error",
+          );
         }
       });
 
@@ -29,7 +37,17 @@ function App() {
   }, []);
 
   if (!ready) {
-    return <AppShell loading />;
+    return (
+      <AppShell
+        loading={!bootstrapError}
+        statusTitle={bootstrapError ? "Storage bootstrap failed" : undefined}
+        statusMessage={
+          bootstrapError
+            ? `Seiri could not load its persisted storage contracts. ${bootstrapError}`
+            : undefined
+        }
+      />
+    );
   }
 
   return (

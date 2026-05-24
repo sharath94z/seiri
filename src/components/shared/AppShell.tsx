@@ -10,9 +10,22 @@ const navigationItems = [
 
 type AppShellProps = {
   loading?: boolean;
+  statusTitle?: string;
+  statusMessage?: string;
 };
 
-export function AppShell({ loading = false }: AppShellProps) {
+export function AppShell({
+  loading = false,
+  statusTitle,
+  statusMessage,
+}: AppShellProps) {
+  const resolvedStatusTitle = statusTitle ?? (loading ? "Hydrating storage" : "M2 contracts active");
+  const resolvedStatusMessage =
+    statusMessage ??
+    (loading
+      ? "Seiri is loading the persisted rule, settings, activity, and retry queue contracts."
+      : "Rules, settings, activity, and retry state now hydrate through the Tauri-backed persistence boundary.");
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -47,13 +60,9 @@ export function AppShell({ loading = false }: AppShellProps) {
           <div className="status-card">
             <div className="status-row">
               <span className="status-dot" aria-hidden="true" />
-              <span>{loading ? "Hydrating storage" : "M2 contracts active"}</span>
+              <span>{resolvedStatusTitle}</span>
             </div>
-            <p>
-              {loading
-                ? "Seiri is loading the persisted rule, settings, activity, and retry queue contracts."
-                : "Rules, settings, activity, and retry state now hydrate through the Tauri-backed persistence boundary."}
-            </p>
+            <p>{resolvedStatusMessage}</p>
           </div>
         </section>
       </aside>
