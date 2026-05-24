@@ -7,9 +7,9 @@
 
 ## Current Snapshot
 
-- Current milestone: `M1 Engine Feasibility`
-- Current focus: `run CodeRabbit review and merge M1`
-- Last updated: `2026-05-17`
+- Current milestone: `M3 First Vertical Slice`
+- Current focus: `implement manual pdf -> move -> log -> undo slice`
+- Last updated: `2026-05-24`
 
 ---
 
@@ -55,31 +55,31 @@
 - [x] Validate trash action
 - [x] Document gaps between Seiri rule model and `organize`
 - [x] Make engine decision: `keep`, `wrap`, or `replace`
-- [ ] Run CodeRabbit review on the M1 diff
-- [ ] Merge the M1 branch to `main`
+- [x] Run CodeRabbit review on the M1 diff
+- [x] Merge the M1 branch to `main`
 
 ### M1 Exit Criteria
 
 - [x] Feasibility results are documented
 - [x] Engine decision is explicit
-- [ ] M1 branch is reviewed and merged to `main`
+- [x] M1 branch is reviewed and merged to `main`
 
 ---
 
 ## M2 — Data Model + Storage
 
-- [ ] Finalize rule schema from PRD v1.2
-- [ ] Finalize settings schema
-- [ ] Finalize activity schema
-- [ ] Finalize retry queue schema
-- [ ] Implement storage through Tauri-backed app layer
-- [ ] Define persisted file locations
-- [ ] Define migration strategy for v1
+- [x] Finalize rule schema from PRD v1.2
+- [x] Finalize settings schema
+- [x] Finalize activity schema
+- [x] Finalize retry queue schema
+- [x] Implement storage through Tauri-backed app layer
+- [x] Define persisted file locations
+- [x] Define migration strategy for v1
 
 ### M2 Exit Criteria
 
-- [ ] Frontend and native storage contracts are stable
-- [ ] Persistence works outside browser-only local storage
+- [x] Frontend and native storage contracts are stable
+- [x] Persistence works outside browser-only local storage
 
 ---
 

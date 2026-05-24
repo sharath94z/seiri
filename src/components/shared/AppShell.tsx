@@ -8,7 +8,11 @@ const navigationItems = [
   { to: "/settings", label: "Settings", icon: Settings2 },
 ];
 
-export function AppShell() {
+type AppShellProps = {
+  loading?: boolean;
+};
+
+export function AppShell({ loading = false }: AppShellProps) {
   return (
     <div className="app-shell">
       <aside className="sidebar">
@@ -43,18 +47,19 @@ export function AppShell() {
           <div className="status-card">
             <div className="status-row">
               <span className="status-dot" aria-hidden="true" />
-              <span>Foundation in progress</span>
+              <span>{loading ? "Hydrating storage" : "M2 contracts active"}</span>
             </div>
             <p>
-              App shell, routes, types, and storage utilities are ready for the
-              first working file automation slice.
+              {loading
+                ? "Seiri is loading the persisted rule, settings, activity, and retry queue contracts."
+                : "Rules, settings, activity, and retry state now hydrate through the Tauri-backed persistence boundary."}
             </p>
           </div>
         </section>
       </aside>
 
       <main className="content-panel">
-        <Outlet />
+        {loading ? null : <Outlet />}
       </main>
     </div>
   );
