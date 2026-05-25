@@ -8,7 +8,7 @@
 ## Current Snapshot
 
 - Current milestone: `M3 First Vertical Slice`
-- Current focus: `implement manual pdf -> move -> log -> undo slice`
+- Current focus: `start manual pdf -> move -> log -> undo slice on top of landed M2 storage contracts`
 - Last updated: `2026-05-24`
 
 ---
@@ -80,6 +80,11 @@
 
 - [x] Frontend and native storage contracts are stable
 - [x] Persistence works outside browser-only local storage
+
+### M2 Status
+
+- [x] M2 branch committed and pushed for review
+- [x] Ready to begin M3
 
 ---
 
