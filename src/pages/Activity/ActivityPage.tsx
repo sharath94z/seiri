@@ -15,16 +15,19 @@ export function ActivityPage() {
 
       <SurfaceCard
         title="Feed scaffold"
-        description="The store and UI are ready for real activity events once the watcher and engine land."
+        description="Activity entries now persist the full trust contract shape needed for logging, filtering, and future undo work."
       >
         <ul className="stack-list">
           {activity.map((entry) => (
             <li key={entry.id} className="list-row">
               <div>
                 <p>{entry.filename}</p>
-                <span>{entry.status}</span>
+                <span>
+                  {entry.status}
+                  {entry.ruleName ? ` · ${entry.ruleName}` : ""}
+                </span>
               </div>
-              <code>{entry.timestamp}</code>
+              <code>{entry.finalPath ?? entry.timestamp}</code>
             </li>
           ))}
         </ul>

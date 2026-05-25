@@ -12,7 +12,7 @@ Seiri is a macOS file organization utility built with Tauri, React, TypeScript, 
 
 ## Current Focus
 
-The app shell and foundation scaffold are in place. The next deliberate milestone is M1 engine feasibility.
+M2 data model and storage work is now in place and pushed on `codex-m2-data-model-storage`. The next deliberate milestone is M3: the first end-to-end `pdf -> move -> log -> undo` slice.
 
 ## Running Locally
 

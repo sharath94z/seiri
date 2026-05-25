@@ -17,14 +17,18 @@ export function RulesPage() {
       <div className="two-column-grid">
         <SurfaceCard
           title="Current rules"
-          description="Local state is wired up so rule management can grow without reshaping the app shell."
+          description="The persisted rule contract now matches the v1 schema shape, including condition trees and action arrays."
         >
           <ul className="stack-list">
             {rules.map((rule) => (
               <li key={rule.id} className="list-row">
                 <div>
                   <p>{rule.name}</p>
-                  <span>Priority {rule.priority}</span>
+                  <span>
+                    Priority {rule.priority} · {rule.conditions.length} condition
+                    {rule.conditions.length === 1 ? "" : "s"} · {rule.actions.length} action
+                    {rule.actions.length === 1 ? "" : "s"}
+                  </span>
                 </div>
                 <strong>{rule.enabled ? "Enabled" : "Disabled"}</strong>
               </li>
@@ -34,16 +38,23 @@ export function RulesPage() {
 
         <SurfaceCard
           title="Pre-built seeds"
-          description="These examples come directly from the product spec and give us a stable base for future builder work."
+          description="Seeded rules are stored as real rule definitions rather than placeholder summaries."
         >
           <ul className="stack-list">
             {prebuiltRules.map((rule) => (
               <li key={rule.id} className="list-row">
                 <div>
                   <p>{rule.name}</p>
-                  <span>{rule.summary}</span>
+                  <span>
+                    {rule.actions?.[0]?.type ?? "no action"} · top-level{" "}
+                    {rule.conditionLogic}
+                  </span>
                 </div>
-                <code>{rule.destination}</code>
+                <code>
+                  {rule.actions?.[0] && "value" in rule.actions[0]
+                    ? rule.actions[0].value
+                    : "Trash"}
+                </code>
               </li>
             ))}
           </ul>

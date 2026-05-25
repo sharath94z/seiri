@@ -1,11 +1,55 @@
+import { useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { AppShell } from "./components/shared/AppShell";
 import { ActivityPage } from "./pages/Activity/ActivityPage";
 import { OnboardingPage } from "./pages/Onboarding/OnboardingPage";
 import { RulesPage } from "./pages/Rules/RulesPage";
 import { SettingsPage } from "./pages/Settings/SettingsPage";
+import { bootstrapStores } from "./store/bootstrap";
 
 function App() {
+  const [ready, setReady] = useState(false);
+  const [bootstrapError, setBootstrapError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    void bootstrapStores()
+      .then(() => {
+        if (mounted) {
+          setReady(true);
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to bootstrap Seiri stores", error);
+        if (mounted) {
+          setBootstrapError(
+            error instanceof Error
+              ? error.message
+              : "Unknown bootstrap error",
+          );
+        }
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (!ready) {
+    return (
+      <AppShell
+        loading={!bootstrapError}
+        statusTitle={bootstrapError ? "Storage bootstrap failed" : undefined}
+        statusMessage={
+          bootstrapError
+            ? `Seiri could not load its persisted storage contracts. ${bootstrapError}`
+            : undefined
+        }
+      />
+    );
+  }
+
   return (
     <Routes>
       <Route element={<AppShell />}>
