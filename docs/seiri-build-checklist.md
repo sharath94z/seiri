@@ -8,8 +8,8 @@
 ## Current Snapshot
 
 - Current milestone: `M3 First Vertical Slice`
-- Current focus: `start manual pdf -> move -> log -> undo slice on top of landed M2 storage contracts`
-- Last updated: `2026-05-24`
+- Current focus: `manual pdf -> move -> log -> undo slice is implemented and awaiting branch review`
+- Last updated: `2026-05-26`
 
 ---
 
@@ -90,21 +90,21 @@
 
 ## M3 — First Vertical Slice
 
-- [ ] Implement manual processing flow for `~/Downloads`
-- [ ] Implement stable file check for the slice
-- [ ] Implement one `pdf -> move` rule
-- [ ] Implement destination conflict handling for the slice
-- [ ] Log successful actions
-- [ ] Log failed actions
-- [ ] Store undo metadata
-- [ ] Implement undo for `move`
-- [ ] Verify end-to-end with a real file
+- [x] Implement manual processing flow for `~/Downloads`
+- [x] Implement stable file check for the slice
+- [x] Implement one `pdf -> move` rule
+- [x] Implement destination conflict handling for the slice
+- [x] Log successful actions
+- [x] Log failed actions
+- [x] Store undo metadata
+- [x] Implement undo for `move`
+- [x] Verify end-to-end with a real file
 
 ### M3 Exit Criteria
 
-- [ ] Real PDF file can be processed through the app
-- [ ] Activity entry is created
-- [ ] Undo works
+- [x] Real PDF file can be processed through the app
+- [x] Activity entry is created
+- [x] Undo works
 
 ---
 

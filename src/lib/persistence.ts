@@ -10,6 +10,7 @@ const storagePrefix = "seiri";
 const legacyRulesKey = `${storagePrefix}:rules`;
 const legacySettingsKey = `${storagePrefix}:settings`;
 const legacyActivityKey = `${storagePrefix}:activity`;
+const legacyRetryQueueKey = `${storagePrefix}:retryQueue`;
 
 const storageFileNames = {
   rules: "rules.json",
@@ -23,6 +24,20 @@ export type StorageStatus = {
   settingsExists: boolean;
   activityExists: boolean;
   retryQueueExists: boolean;
+};
+
+export type M3RunResult = {
+  status: "moved" | "skipped" | "no_match" | "failed";
+  message: string;
+  activityEntry: ActivityEntry | null;
+  entries: ActivityEntry[];
+};
+
+export type UndoActivityResult = {
+  status: "undone" | "failed";
+  message: string;
+  activityEntry: ActivityEntry | null;
+  entries: ActivityEntry[];
 };
 
 export const defaultSettings: SettingsState = {
@@ -70,7 +85,7 @@ export async function getStorageStatus(): Promise<StorageStatus> {
       rulesExists: localStorageKeyExists(legacyRulesKey),
       settingsExists: localStorageKeyExists(legacySettingsKey),
       activityExists: localStorageKeyExists(legacyActivityKey),
-      retryQueueExists: false,
+      retryQueueExists: localStorageKeyExists(legacyRetryQueueKey),
     };
   }
 
@@ -130,7 +145,7 @@ export async function saveActivity(entries: ActivityEntry[]) {
 
 export async function loadRetryQueue(): Promise<RetryQueueEntry[]> {
   if (!isTauri()) {
-    return defaultRetryQueueEntries;
+    return readLocalStorage(legacyRetryQueueKey, defaultRetryQueueEntries);
   }
 
   return invoke<RetryQueueEntry[]>("load_retry_queue");
@@ -138,6 +153,7 @@ export async function loadRetryQueue(): Promise<RetryQueueEntry[]> {
 
 export async function saveRetryQueue(entries: RetryQueueEntry[]) {
   if (!isTauri()) {
+    writeLocalStorage(legacyRetryQueueKey, entries);
     return;
   }
 
@@ -171,6 +187,26 @@ export async function migrateLegacyStorageIfNeeded() {
   if (!status.retryQueueExists && isTauri()) {
     await saveRetryQueue(defaultRetryQueueEntries);
   }
+}
+
+export async function runM3PdfSlice(): Promise<M3RunResult> {
+  if (!isTauri()) {
+    throw new Error("M3 PDF slice requires the Tauri runtime");
+  }
+
+  return invoke<M3RunResult>("run_m3_pdf_slice");
+}
+
+export async function undoActivityEntry(
+  activityEntryId: string,
+): Promise<UndoActivityResult> {
+  if (!isTauri()) {
+    throw new Error("Undo requires the Tauri runtime");
+  }
+
+  return invoke<UndoActivityResult>("undo_activity_entry", {
+    activity_entry_id: activityEntryId,
+  });
 }
 
 export function readStorageFileNames() {
@@ -289,7 +325,11 @@ function localStorageKeyExists(key: string) {
     return false;
   }
 
-  return window.localStorage.getItem(key) !== null;
+  try {
+    return window.localStorage.getItem(key) !== null;
+  } catch {
+    return false;
+  }
 }
 
 function readLocalStorage<T>(key: string, fallback: T): T {
